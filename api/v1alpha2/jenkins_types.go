@@ -22,6 +22,10 @@ type JenkinsSpec struct {
 	// +optional
 	SeedJobAgentImage string `json:"seedJobAgentImage,omitempty"`
 
+	// SecurityContext that applies to all the containers of the Jenkins SeedJob Agent.
+	// +optional
+	SeedJobAgentSecurityContext *corev1.SecurityContext `json:"seedJobAgentSecurityContext,omitempty"`
+
 	// ValidateSecurityWarnings enables or disables validating potential security warnings in Jenkins plugins via admission webhooks.
 	//+optional
 	ValidateSecurityWarnings bool `json:"validateSecurityWarnings,omitempty"`

@@ -21,8 +21,8 @@ limitations under the License.
 package v1alpha2
 
 import (
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/api/rbac/v1"
+	"k8s.io/api/core/v1"
+	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -104,48 +104,48 @@ func (in *Container) DeepCopyInto(out *Container) {
 	}
 	if in.Ports != nil {
 		in, out := &in.Ports, &out.Ports
-		*out = make([]corev1.ContainerPort, len(*in))
+		*out = make([]v1.ContainerPort, len(*in))
 		copy(*out, *in)
 	}
 	if in.EnvFrom != nil {
 		in, out := &in.EnvFrom, &out.EnvFrom
-		*out = make([]corev1.EnvFromSource, len(*in))
+		*out = make([]v1.EnvFromSource, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.Env != nil {
 		in, out := &in.Env, &out.Env
-		*out = make([]corev1.EnvVar, len(*in))
+		*out = make([]v1.EnvVar, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.VolumeMounts != nil {
 		in, out := &in.VolumeMounts, &out.VolumeMounts
-		*out = make([]corev1.VolumeMount, len(*in))
+		*out = make([]v1.VolumeMount, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.LivenessProbe != nil {
 		in, out := &in.LivenessProbe, &out.LivenessProbe
-		*out = new(corev1.Probe)
+		*out = new(v1.Probe)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ReadinessProbe != nil {
 		in, out := &in.ReadinessProbe, &out.ReadinessProbe
-		*out = new(corev1.Probe)
+		*out = new(v1.Probe)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Lifecycle != nil {
 		in, out := &in.Lifecycle, &out.Lifecycle
-		*out = new(corev1.Lifecycle)
+		*out = new(v1.Lifecycle)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.SecurityContext != nil {
 		in, out := &in.SecurityContext, &out.SecurityContext
-		*out = new(corev1.SecurityContext)
+		*out = new(v1.SecurityContext)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -202,7 +202,7 @@ func (in *Handler) DeepCopyInto(out *Handler) {
 	*out = *in
 	if in.Exec != nil {
 		in, out := &in.Exec, &out.Exec
-		*out = new(corev1.ExecAction)
+		*out = new(v1.ExecAction)
 		(*in).DeepCopyInto(*out)
 	}
 }
@@ -317,7 +317,7 @@ func (in *JenkinsMaster) DeepCopyInto(out *JenkinsMaster) {
 	}
 	if in.SecurityContext != nil {
 		in, out := &in.SecurityContext, &out.SecurityContext
-		*out = new(corev1.PodSecurityContext)
+		*out = new(v1.PodSecurityContext)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Containers != nil {
@@ -329,19 +329,19 @@ func (in *JenkinsMaster) DeepCopyInto(out *JenkinsMaster) {
 	}
 	if in.ImagePullSecrets != nil {
 		in, out := &in.ImagePullSecrets, &out.ImagePullSecrets
-		*out = make([]corev1.LocalObjectReference, len(*in))
+		*out = make([]v1.LocalObjectReference, len(*in))
 		copy(*out, *in)
 	}
 	if in.Volumes != nil {
 		in, out := &in.Volumes, &out.Volumes
-		*out = make([]corev1.Volume, len(*in))
+		*out = make([]v1.Volume, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.Tolerations != nil {
 		in, out := &in.Tolerations, &out.Tolerations
-		*out = make([]corev1.Toleration, len(*in))
+		*out = make([]v1.Toleration, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -363,7 +363,7 @@ func (in *JenkinsMaster) DeepCopyInto(out *JenkinsMaster) {
 	}
 	if in.HostAliases != nil {
 		in, out := &in.HostAliases, &out.HostAliases
-		*out = make([]corev1.HostAlias, len(*in))
+		*out = make([]v1.HostAlias, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -394,6 +394,11 @@ func (in *JenkinsSpec) DeepCopyInto(out *JenkinsSpec) {
 		*out = make([]SeedJob, len(*in))
 		copy(*out, *in)
 	}
+	if in.SeedJobAgentSecurityContext != nil {
+		in, out := &in.SeedJobAgentSecurityContext, &out.SeedJobAgentSecurityContext
+		*out = new(v1.SecurityContext)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Notifications != nil {
 		in, out := &in.Notifications, &out.Notifications
 		*out = make([]Notification, len(*in))
@@ -409,7 +414,7 @@ func (in *JenkinsSpec) DeepCopyInto(out *JenkinsSpec) {
 	in.ConfigurationAsCode.DeepCopyInto(&out.ConfigurationAsCode)
 	if in.Roles != nil {
 		in, out := &in.Roles, &out.Roles
-		*out = make([]v1.RoleRef, len(*in))
+		*out = make([]rbacv1.RoleRef, len(*in))
 		copy(*out, *in)
 	}
 	in.ServiceAccount.DeepCopyInto(&out.ServiceAccount)

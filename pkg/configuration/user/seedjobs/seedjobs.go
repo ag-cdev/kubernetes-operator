@@ -419,6 +419,8 @@ func agentDeployment(jenkins *v1alpha2.Jenkins, namespace string, agentName stri
 		agentImage = defaultAgentImage
 	}
 
+	seedJobAgentSecurityContext := jenkins.Spec.SeedJobAgentSecurityContext
+
 	suffix := ""
 	if prefix, ok := resources.GetJenkinsOpts(*jenkins)["prefix"]; ok {
 		suffix = prefix
@@ -447,8 +449,9 @@ func agentDeployment(jenkins *v1alpha2.Jenkins, namespace string, agentName stri
 					HostAliases:      jenkins.Spec.Master.HostAliases,
 					Containers: []corev1.Container{
 						{
-							Name:  "jnlp",
-							Image: agentImage,
+							Name:            "jnlp",
+							Image:           agentImage,
+							SecurityContext: seedJobAgentSecurityContext,
 							Env: []corev1.EnvVar{
 								{
 									Name:  "JENKINS_WEB_SOCKET",

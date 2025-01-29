@@ -1,7 +1,7 @@
 include variables.mk
 
 .PHONY: all
-all: status checkmake clean build verify install container-runtime-build container-runtime-images ## Build the image
+all: status clean build verify install container-runtime-build container-runtime-images ## Build the image
 	@echo "+ $@"
 
 .PHONY: check-env
@@ -271,7 +271,8 @@ container-runtime-build-%: ## Build the container
 		--file Dockerfile $(CONTAINER_RUNTIME_EXTRA_ARGS)
 
 .PHONY: container-runtime-build
-container-runtime-build: check-env deepcopy-gen container-runtime-build-amd64 container-runtime-build-arm64
+container-runtime-build: check-env deepcopy-gen container-runtime-build-amd64
+# container-runtime-build-arm64
 
 .PHONY: container-runtime-images
 container-runtime-images: ## List all local containers
